@@ -4,8 +4,14 @@ import processing.core.PFont;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import java.io.File;
 import java.io.PrintWriter;
+
+import item.*;
+import environment.*;
+import entity.*;
+
 
 public class Main extends PApplet {
     // Number of Rows and Columns in Room
