@@ -4,8 +4,15 @@ import item.Weapon;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.sound.*;
+import constants.FilePaths;
 
 public class Player extends Entity {
+    private static final String CHAINMAIL_PATH_1 = "chainmail/chainmail1" + FilePaths.WAV_EXTENSION;
+    private static final String CHAINMAIL_PATH_2 = "chainmail/chainmail2" + FilePaths.WAV_EXTENSION;
+    private static final String SWING_PATH = "battle/swing";
+    private static final String HIT_EXTENSION = "_hit_anim_f0" + FilePaths.PNG_EXTENSION;
+    private static final float AMP_MODIFIER = 0.25f;
+    private static final int SWING_AMOUNT = 3;
     // Steps
     private SoundFile step1, step2;
     private int stepTime, stepWait;
@@ -31,7 +38,6 @@ public class Player extends Entity {
         // Create Frames
         frameAmount = 4;
         frameCycle = 20;
-        currentFrame = 0;
         createFrames();
 
         speed = 3.5;
@@ -39,8 +45,8 @@ public class Player extends Entity {
         faceLeft = false;
 
         // Steps
-        step1 = new SoundFile(applet, "chainmail/chainmail1.wav");
-        step2 = new SoundFile(applet, "chainmail/chainmail2.wav");
+        step1 = new SoundFile(applet, CHAINMAIL_PATH_1);
+        step2 = new SoundFile(applet, CHAINMAIL_PATH_2);
 
         stepTime = applet.millis();
         stepWait = 500;
@@ -64,12 +70,12 @@ public class Player extends Entity {
         health = 0;
 
         // Hit Frame
-        hitFrame = applet.loadImage("assets/" + file + "_hit_anim_f0.png");
+        hitFrame = applet.loadImage(FilePaths.ASSETS_PATH + file + HIT_EXTENSION);
 
         // Swings
-        swingSounds = new SoundFile[3];
-        for (int i = 1; i < 4; i++) {
-            swingSounds[i - 1] = new SoundFile(applet, "battle/swing" + i + ".wav");
+        swingSounds = new SoundFile[SWING_AMOUNT];
+        for (int i = 1; i <= SWING_AMOUNT; i++) {
+            swingSounds[i - 1] = new SoundFile(applet, SWING_PATH + i + FilePaths.WAV_EXTENSION);
         }
         swingNum = 0;
     }
@@ -120,10 +126,10 @@ public class Player extends Entity {
     private void playStep() {
         if (applet.millis() - stepTime >= stepWait) {
             if (step1Played) {
-                step2.play(1, (float)0.25);
+                step2.play(1, AMP_MODIFIER);
             }
             else {
-                step1.play(1, (float)0.25);
+                step1.play(1, AMP_MODIFIER);
             }
             step1Played = !step1Played;
             stepTime = applet.millis();
@@ -131,9 +137,13 @@ public class Player extends Entity {
     }
 
     public void setAttack(boolean isAttacking) {
-        if (isAttacking && !swingSounds[(swingNum + 2) % 3].isPlaying() && this.isAttacking != isAttacking) {
+        int previousSwing = (swingNum + SWING_AMOUNT - 1) % SWING_AMOUNT;
+        if (isAttacking &&
+            !swingSounds[previousSwing].isPlaying() &&
+            this.isAttacking != isAttacking) {
+
             swingSounds[swingNum].play();
-            swingNum = (swingNum + 1) % 3;
+            swingNum = (swingNum + 1) % SWING_AMOUNT;
         }
 
         this.isAttacking = isAttacking;

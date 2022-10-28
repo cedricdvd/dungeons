@@ -3,6 +3,11 @@ import environment.Room;
 import processing.core.PApplet;
 
 public class Enemy extends Entity {
+    private static final double UP_PROBABILITY = 0.45;
+    private static final double DOWN_PROBABILITY = 0.45;
+    private static final double LEFT_PROBABILITY = 0.45;
+    private static final double RIGHT_PROBABILITY = 0.45;
+
     protected int moveTime, moveWait;
     protected int score;
 
@@ -29,19 +34,19 @@ public class Enemy extends Entity {
 
             // Vertical Movement
             double rand = Math.random();
-            if (rand < 0.45) {
+            if (rand < UP_PROBABILITY) {
                 setMoveUp(true);
             }
-            else if (rand < 0.9) {
+            else if (rand < UP_PROBABILITY + DOWN_PROBABILITY) {
                 setMoveDown(true);
             }
 
             // Horizontal Movement
             rand = Math.random();
-            if (rand < 0.45) {
+            if (rand < RIGHT_PROBABILITY) {
                 setMoveRight(true);
             }
-            else if (rand < 0.9) {
+            else if (rand < RIGHT_PROBABILITY + LEFT_PROBABILITY) {
                 setMoveLeft(true);
             }
 

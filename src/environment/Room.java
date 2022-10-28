@@ -1,8 +1,17 @@
 package environment;
 import processing.core.PApplet;
 import processing.sound.*;
+import constants.FilePaths;
 
 public class Room {
+    private static final String FLOOR_FILE = "floor_";
+    private static final String WALL_FILE = "wall_mid";
+    private static final String DOOR_SOUND = "door/door" + FilePaths.WAV_EXTENSION;
+    private static final String DOOR_OPEN = "doors_leaf_open";
+    private static final String DOOR_CLOSED = "doors_leaf_closed";
+    private static final int FLOOR_FILE_COUNT = 8;
+    private static final double DEFAULT_FLOOR_PROBABILITY = 0.8;
+    private static final float AMP_MODIFIER = 0.75f;
     // 2D Tile Array Variables
     private Tile[][] tiles;
     private int ROWS, COLS;
@@ -28,15 +37,16 @@ public class Room {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 if (row > 0 && row < ROWS - 1 && col > 0 && col < COLS - 1) {
-                    if (Math.random() < .8) {
-                        file = "floor_1";
+                    if (Math.random() < DEFAULT_FLOOR_PROBABILITY) {
+                        file = FLOOR_FILE + 1;
                     }
                     else {
-                        file = "floor_" + PApplet.nf((int) (Math.random() * 7) + 2, 1);
+                        int tileNumber = (int)(Math.random() * FLOOR_FILE_COUNT) + 1;
+                        file = FLOOR_FILE + PApplet.nf(tileNumber, 1);
                     }
                 }
                 else {
-                    file = "wall_mid";
+                    file = WALL_FILE;
                 }
 
                 tiles[row][col] = new Tile(applet, col * 32 + 16 + xShift, row * 32 + 16 + yShift);
@@ -47,7 +57,7 @@ public class Room {
 
         closeDoors();
 
-        doorOpen = new SoundFile(applet, "door/door.wav");
+        doorOpen = new SoundFile(applet, DOOR_SOUND);
         leftBorder = xShift + 32;
         rightBorder = xShift + (COLS - 1) * 32;
         upBorder = yShift + 16;
@@ -84,8 +94,8 @@ public class Room {
 
     public void openDoors() {
         doorsClosed = false;
-        String door = "doors_leaf_open";
-        doorOpen.play(1, (float) 0.75);
+        String door = DOOR_OPEN;
+        doorOpen.play(1, AMP_MODIFIER);
         tiles[0][COLS / 2].setTile(door);
         tiles[ROWS / 2][0].setTile(door);
         tiles[ROWS / 2][COLS - 1].setTile(door);
@@ -94,7 +104,7 @@ public class Room {
 
     public void closeDoors() {
         doorsClosed = true;
-        String door = "doors_leaf_closed";
+        String door = DOOR_CLOSED;
         tiles[0][COLS / 2].setTile(door);
         tiles[ROWS / 2][0].setTile(door);
         tiles[ROWS / 2][COLS - 1].setTile(door);
@@ -105,11 +115,12 @@ public class Room {
         String file;
         for (int row = 1; row < ROWS - 1; row++) {
             for (int col = 1; col < COLS - 1; col++) {
-                if (Math.random() < .8) {
-                    file = "floor_1";
+                if (Math.random() < DEFAULT_FLOOR_PROBABILITY) {
+                    file = FLOOR_FILE + 1;
                 }
                 else {
-                    file = "floor_" + PApplet.nf((int) (Math.random() * 7) + 2, 1);
+                    int tileNumber = (int)(Math.random() * FLOOR_FILE_COUNT) + 1;
+                    file = FLOOR_FILE + PApplet.nf(tileNumber, 1);
                 }
 
                 tiles[row][col].setTile(file);

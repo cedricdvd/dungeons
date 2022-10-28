@@ -1,6 +1,8 @@
 package entity;
-import environment.Room;
+
 import processing.core.PApplet;
+import environment.Room;
+import constants.EntityValues;
 
 public class BigZombie extends Enemy {
     
@@ -9,7 +11,6 @@ public class BigZombie extends Enemy {
 
         // Initialize frames
         frameAmount = 4;
-        currentFrame = 0;
         frameCycle = 20;
         createFrames();
 
@@ -28,7 +29,7 @@ public class BigZombie extends Enemy {
         bottomShift = -21;
         topShift = 33;
 
-        score = 300;
-        health = 3;
+        score = EntityValues.LARGE_POINTS;
+        health = EntityValues.LARGE_HEALTH;
     }
 }

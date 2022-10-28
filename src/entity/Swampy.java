@@ -1,6 +1,8 @@
 package entity;
-import environment.Room;
+
 import processing.core.PApplet;
+import environment.Room;
+import constants.EntityValues;
 
 public class Swampy extends Enemy {
     public Swampy(PApplet applet, double x, double y, Room room) {
@@ -8,7 +10,6 @@ public class Swampy extends Enemy {
 
         // Initialize frames
         frameAmount = 4;
-        currentFrame = 0;
         frameCycle = 20;
         createFrames();
 
@@ -27,7 +28,7 @@ public class Swampy extends Enemy {
         bottomShift = -16;
         topShift = 16;
 
-        score = 200;
-        health = 2;
+        score = EntityValues.MEDIUM_POINTS;
+        health = EntityValues.MEDIUM_HEALTH;
     }
 }

@@ -1,6 +1,8 @@
 package entity;
-import environment.Room;
+
 import processing.core.PApplet;
+import environment.Room;
+import constants.EntityValues;
 
 public class Goblin extends Enemy {
     public Goblin(PApplet applet, double x, double y, Room room) {
@@ -8,7 +10,6 @@ public class Goblin extends Enemy {
 
         // Initialize frames
         frameAmount = 4;
-        currentFrame = 0;
         frameCycle = 20;
         createFrames();
 
@@ -27,7 +28,7 @@ public class Goblin extends Enemy {
         bottomShift = -3;
         topShift = 16;
 
-        score = 100;
-        health = 1;
+        score = EntityValues.SMALL_POINTS;
+        health = EntityValues.SMALL_HEALTH;
     }
 }

@@ -1,8 +1,10 @@
 package environment;
 import processing.core.PApplet;
 import processing.core.PImage;
+import constants.FilePaths;
 
 public class Tile {
+    private static final String TILE_PATH = FilePaths.ASSETS_PATH + "tiles/";
     private PApplet applet;
     private int x;
     private int y;
@@ -39,6 +41,6 @@ public class Tile {
     }
 
     public void setTile(String files) {
-        image = applet.loadImage("assets/tiles/" + files + ".png");
+        image = applet.loadImage(TILE_PATH + files + FilePaths.PNG_EXTENSION);
     }
 }

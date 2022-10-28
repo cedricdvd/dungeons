@@ -1,22 +1,32 @@
 package entity;
+
+// Processing packages
 import processing.core.PApplet;
 import processing.core.PImage;
 
+// File reading packages
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+// Game packages
 import item.HitBox;
 import environment.Room;
 
+import constants.FilePaths;
+
 public class Entity {
+    private static final String IDLE_EXTENSION = "_idle_anim_f";
+    private static final String RUN_EXTENSION = "_run_anim_f";
+    private static final String IMAGE_ERROR = "Couldn't read image.";
     protected PApplet applet;
 
     // image variables
     protected String file;
     protected PImage[] idleFrames, runFrames;
     protected int height, width;
-    protected int frameAmount, currentFrame, frameCycle;
+    protected int frameAmount, frameCycle;
+    protected int currentFrame = 0;
 
     // coordinates and speed
     protected double x, y;
@@ -45,17 +55,25 @@ public class Entity {
         this.room = room;
         this.file = file;
 
-        // Get image width and height
+        // Get dimensions of entity's image
         try {
-            BufferedImage img = ImageIO.read(new File("src/assets/" + file + "_idle_anim_f0.png"));
+            // Get the first idle frame
+            BufferedImage img = ImageIO.read(
+                new File(FilePaths.SRC_IMAGE_PATH + file +
+                    IDLE_EXTENSION + 0 + FilePaths.PNG_EXTENSION)
+            );
+
+            // Store dimensions
             width = img.getWidth();
             height = img.getHeight();
         }
         catch (Exception e) {
-            System.out.println("Couldn't read image");
+            // Image could not be read
+            System.out.println(IMAGE_ERROR);
         }
 
-        hitbox = new HitBox(applet, x + leftShift, y + bottomShift, x + rightShift, y + topShift);
+        hitbox = new HitBox(applet, x + leftShift, y + bottomShift,
+            x + rightShift, y + topShift);
         
         hitTime = applet.millis();
         hitWait = 500;
@@ -68,11 +86,11 @@ public class Entity {
         idleFrames = new PImage[frameAmount];
         runFrames = new PImage[frameAmount];
 
-        String path = "assets/" + file;
+        String path = FilePaths.ASSETS_PATH + file;
         for (int i = 0; i < frameAmount; i++) {
-            String extension = "_anim_f" + PApplet.nf(i,1) + ".png";
-            idleFrames[i] = applet.loadImage(path + "_idle" + extension);
-            runFrames[i] = applet.loadImage(path + "_run" + extension);
+            String fileNumber = PApplet.nf(i,1) + FilePaths.PNG_EXTENSION;
+            idleFrames[i] = applet.loadImage(path + IDLE_EXTENSION + fileNumber);
+            runFrames[i] = applet.loadImage(path + RUN_EXTENSION + fileNumber);
         }
     }
 
@@ -82,7 +100,7 @@ public class Entity {
 
         // Flip the image if Entity is facing left
         if (isFacingLeft()) {
-            scaleX *= - 1;
+            scaleX *= -1;
         }
 
         // Apply necessary transformations
